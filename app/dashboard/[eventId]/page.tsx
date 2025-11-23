@@ -62,8 +62,9 @@ export default function DashboardPage() {
         const channel = supabase
             .channel("dashboard")
             .on("postgres_changes", { event: "*", schema: "public", table: "events", filter: `id=eq.${eventId}` }, (payload) => {
-                setEvent(payload.new);
-                if (payload.new.status === "completed") {
+                const newEvent = payload.new as any;
+                setEvent(newEvent);
+                if (newEvent.status === "completed") {
                     confetti({
                         particleCount: 100,
                         spread: 70,
