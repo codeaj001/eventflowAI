@@ -4,7 +4,7 @@ info:
   description: Tools for creating Notion pages and logging tasks.
   version: 1.0.0
 servers:
-  - url: https://YOUR_VERCEL_PROJECT.vercel.app
+  - url: https://eventflow-ai.vercel.app/
 paths:
   /api/notion/create-page:
     post:

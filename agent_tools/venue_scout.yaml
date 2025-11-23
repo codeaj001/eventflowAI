@@ -4,7 +4,7 @@ info:
   description: Tools for finding venues and logging tasks.
   version: 1.0.0
 servers:
-  - url: https://YOUR_VERCEL_PROJECT.vercel.app
+  - url: https://eventflow-ai.vercel.app/
 paths:
   /api/venues/mock:
     get:

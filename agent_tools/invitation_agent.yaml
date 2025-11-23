@@ -4,7 +4,7 @@ info:
   description: Tools for logging invitation tasks (uses native Google tools for actual invites).
   version: 1.0.0
 servers:
-  - url: https://YOUR_VERCEL_PROJECT.vercel.app
+  - url: https://eventflow-ai.vercel.app/
 paths:
   /api/webhook/orchestrate:
     post:

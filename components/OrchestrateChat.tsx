@@ -1,35 +1,69 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
+
+declare global {
+    interface Window {
+        wxOConfiguration: any;
+        wxoLoader: any;
+    }
+}
 
 export function OrchestrateChat() {
-    const [mounted, setMounted] = useState(false);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const scriptLoaded = useRef(false);
 
     useEffect(() => {
-        setMounted(true);
-    }, []);
+        if (scriptLoaded.current) return;
+        scriptLoaded.current = true;
 
-    if (!mounted) return null;
+        // Configuration from the "Live" snippet
+        window.wxOConfiguration = {
+            orchestrationID: "20251123-0753-5252-80d4-1b59105bda87_20251123-0754-4725-600c-3b5aa865c89a",
+            hostURL: "https://dl.watson-orchestrate.ibm.com",
+            rootElementID: "orchestrate-chat-container",
+            chatOptions: {
+                agentId: "8d0de621-c6ae-4819-be6c-3c88aeb44217",
+                agentEnvironmentId: "59308206-6cb3-4b98-8971-5bb7d7b53993",
+            },
+        };
+
+        // Use setTimeout to ensure DOM is ready (as per snippet)
+        setTimeout(() => {
+            const script = document.createElement("script");
+            script.src = `${window.wxOConfiguration.hostURL}/wxochat/wxoLoader.js?embed=true`;
+            script.async = true;
+            script.addEventListener("load", function () {
+                if (window.wxoLoader) {
+                    window.wxoLoader.init();
+                }
+            });
+            document.head.appendChild(script);
+        }, 0);
+
+        // Handle Auth Token Request
+        const authHandler = (event: any) => {
+            console.warn("Orchestrate requested an auth token. Ensure 'Anonymous Access' is enabled in IBM Agent Builder or implement token exchange.");
+            // If you have a token endpoint, you would fetch it here and call:
+            // event.detail.resolve(token);
+        };
+
+        window.addEventListener('authTokenNeeded', authHandler);
+
+        return () => {
+            // Cleanup if necessary
+            window.removeEventListener('authTokenNeeded', authHandler);
+        };
+    }, []);
 
     return (
         <div className="w-full h-[600px] border rounded-xl overflow-hidden shadow-lg bg-white relative">
-            <div className="absolute inset-0 flex items-center justify-center bg-gray-50 -z-10">
-                <p className="text-gray-500">Loading Orchestrate...</p>
-            </div>
-            {/* Replace src with your actual Orchestrate embed URL */}
-            <iframe
-                src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbXp4eW54eW54eW54eW54eW54eW54eW54eW54eW54eW54eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oKIPEqDGUULpEU0aQ/giphy.gif"
+            {/* The container where Orchestrate will inject the chat */}
+            <div
+                id="orchestrate-chat-container"
+                ref={containerRef}
                 className="w-full h-full"
-                title="Orchestrate Chat"
-                style={{ border: "none" }}
             />
-            {/* 
-        NOTE: In a real implementation, you would use the script embed or iframe provided by IBM.
-        For the hackathon, you might need to paste the specific integration code here.
-      */}
-            <div className="absolute bottom-0 left-0 right-0 bg-black/5 p-2 text-xs text-center text-gray-500">
-                IBM watsonx Orchestrate Embed Placeholder
-            </div>
         </div>
     );
 }

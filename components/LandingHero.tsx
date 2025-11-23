@@ -21,17 +21,13 @@ export function LandingHero() {
                                     View Demo Dashboard <ArrowRight className="h-4 w-4" />
                                 </Button>
                             </Link>
-                            <a href="#chat" className="text-sm font-semibold leading-6 text-gray-900 dark:text-white">
+                            <Link href="/agent" className="text-sm font-semibold leading-6 text-gray-900 dark:text-white">
                                 Try the Agent <span aria-hidden="true">→</span>
-                            </a>
+                            </Link>
                         </div>
                     </div>
 
-                    <div id="chat" className="mt-16 flow-root sm:mt-24">
-                        <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
-                            <OrchestrateChat />
-                        </div>
-                    </div>
+                    {/* Chat moved to /agent page */}
                 </div>
             </div>
         </div>
