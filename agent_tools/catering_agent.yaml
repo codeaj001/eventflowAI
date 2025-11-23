@@ -1,0 +1,67 @@
+openapi: 3.0.1
+info:
+  title: Catering Agent Tools
+  description: Tools for finding catering options and logging tasks.
+  version: 1.0.0
+servers:
+  - url: https://YOUR_VERCEL_PROJECT.vercel.app
+paths:
+  /api/catering/mock:
+    get:
+      operationId: get_catering_options
+      summary: Get list of catering options
+      responses:
+        "200":
+          description: List of catering options
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    type:
+                      type: string
+                    cost_per_person:
+                      type: number
+                    menu_items:
+                      type: array
+                      items:
+                        type: string
+
+  /api/webhook/orchestrate:
+    post:
+      operationId: log_catering_task
+      summary: Log that catering has been arranged
+      parameters:
+        - in: header
+          name: x-webhook-secret
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum: [add_task]
+                payload:
+                  type: object
+                  properties:
+                    event_id:
+                      type: string
+                    title:
+                      type: string
+                    agent_name:
+                      type: string
+      responses:
+        "200":
+          description: Success

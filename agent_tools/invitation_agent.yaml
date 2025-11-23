@@ -1,0 +1,46 @@
+openapi: 3.0.1
+info:
+  title: Invitation Agent Tools
+  description: Tools for logging invitation tasks (uses native Google tools for actual invites).
+  version: 1.0.0
+servers:
+  - url: https://YOUR_VERCEL_PROJECT.vercel.app
+paths:
+  /api/webhook/orchestrate:
+    post:
+      operationId: log_invitation_task
+      summary: Log that invites have been sent or RSVPs received
+      parameters:
+        - in: header
+          name: x-webhook-secret
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum: [add_task, add_rsvp]
+                payload:
+                  type: object
+                  properties:
+                    event_id:
+                      type: string
+                    title:
+                      type: string
+                    agent_name:
+                      type: string
+                    name:
+                      type: string
+                    email:
+                      type: string
+                    status:
+                      type: string
+      responses:
+        "200":
+          description: Success

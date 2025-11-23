@@ -1,0 +1,74 @@
+openapi: 3.0.1
+info:
+  title: Notion Sync Agent Tools
+  description: Tools for creating Notion pages and logging tasks.
+  version: 1.0.0
+servers:
+  - url: https://YOUR_VERCEL_PROJECT.vercel.app
+paths:
+  /api/notion/create-page:
+    post:
+      operationId: create_notion_page
+      summary: Create a page in Notion
+      parameters:
+        - in: header
+          name: x-webhook-secret
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  url:
+                    type: string
+
+  /api/webhook/orchestrate:
+    post:
+      operationId: log_notion_task
+      summary: Log that documentation is complete
+      parameters:
+        - in: header
+          name: x-webhook-secret
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum: [add_task]
+                payload:
+                  type: object
+                  properties:
+                    event_id:
+                      type: string
+                    title:
+                      type: string
+                    agent_name:
+                      type: string
+      responses:
+        "200":
+          description: Success

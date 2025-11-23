@@ -1,0 +1,46 @@
+openapi: 3.0.1
+info:
+  title: Event Planner Agent Tools
+  description: Tools for the main orchestrator to manage events.
+  version: 1.0.0
+servers:
+  - url: https://YOUR_VERCEL_PROJECT.vercel.app
+paths:
+  /api/webhook/orchestrate:
+    post:
+      operationId: manage_event
+      summary: Create or complete an event
+      parameters:
+        - in: header
+          name: x-webhook-secret
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum: [create_event, complete_event]
+                payload:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    description:
+                      type: string
+                    date:
+                      type: string
+                    budget:
+                      type: number
+                    location:
+                      type: string
+                    event_id:
+                      type: string
+      responses:
+        "200":
+          description: Success

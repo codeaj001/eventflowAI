@@ -1,0 +1,69 @@
+openapi: 3.0.1
+info:
+  title: Venue Scout Agent Tools
+  description: Tools for finding venues and logging tasks.
+  version: 1.0.0
+servers:
+  - url: https://YOUR_VERCEL_PROJECT.vercel.app
+paths:
+  /api/venues/mock:
+    get:
+      operationId: get_venues
+      summary: Get list of available venues
+      responses:
+        "200":
+          description: List of venues
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    capacity:
+                      type: integer
+                    cost:
+                      type: number
+                    location:
+                      type: string
+                    amenities:
+                      type: array
+                      items:
+                        type: string
+
+  /api/webhook/orchestrate:
+    post:
+      operationId: log_venue_task
+      summary: Log that venues have been found
+      parameters:
+        - in: header
+          name: x-webhook-secret
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum: [add_task]
+                payload:
+                  type: object
+                  properties:
+                    event_id:
+                      type: string
+                    title:
+                      type: string
+                    agent_name:
+                      type: string
+      responses:
+        "200":
+          description: Success
